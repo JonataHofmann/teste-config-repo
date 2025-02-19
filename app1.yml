@@ -1,0 +1,14 @@
+unicred:
+    ccf:
+        datasource:
+            driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
+            url: jdbc:sqlserver://db-sql-tst.e-unicred.com.br:1433;databaseName=ccf
+            username: ccf_user
+            password: tecnocred
+            initialize: true
+            testOnBorrow: true
+            testWhileIdle: true
+            timeBetweenEvictionRunsMillis: 60000
+            minEvictableIdleTimeMillis: 60000
+            validationQuery: SELECT 1
+            initSQL: set nocount off
