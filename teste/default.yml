@@ -1,0 +1,87 @@
+info:
+  app:
+    getec: CREDITO
+    descricao: Consulta do Serasa e análise de crédito do cooperado. 
+    horarios_criticos: N/A
+    nivel_criticidade: MEDIO
+    processamento_batch: false
+
+serasa:
+  modeloConsultaPadrao: 'RSC1'
+  modeloConsultaPessoaFisica: 'HSPA'
+  modeloConsultaPessoaJuridica: 'HPJ4'
+  consulta:
+    url: https://mqlinuxext.serasa.com.br/Homologa/consultahttps
+    mock: true
+
+http-post:
+  cooperativas: 4022, 159, 60, 0582, 1538, 3034 
+
+unicred:
+    ccf:
+        datasource:
+            driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
+            url: jdbc:sqlserver://db-sql-tst.e-unicred.com.br:1433;databaseName=ccf
+            username: ccf_user
+            password: tecnocred
+            initialize: true
+            testOnBorrow: true
+            testWhileIdle: true
+            timeBetweenEvictionRunsMillis: 60000
+            minEvictableIdleTimeMillis: 60000
+            validationQuery: SELECT 1
+            initSQL: set nocount off
+
+security:
+  ignored: /v2/api-docs,/configuration/ui,/swagger-resources,/swagger-resources/**,/configuration/security,/swagger-ui.html,/webjars/**,/public/**,/management/**,/analise/credito/v1/**
+  urlPatterns: /analise/credito/v1/*     
+
+monitore:
+    cooperativas: 60, 566
+
+spring:
+    cloud:
+        stream:
+            default:
+                consumer:
+                    headerMode: raw
+                producer:
+                    headerMode: raw 
+            bindings:
+                proposta_workflow_cheque_sem_fundo:
+                    destination: credito.proposta-workflow.cheque-sem-fundo
+                    group: analise-credito-us
+                proposta_workflow_cheque_sem_fundo_result:
+                    destination: credito.proposta-workflow.cheque-sem-fundo.result
+                    contentType: application/json
+                proposta_workflow_consulta_serasa:
+                    destination: credito.proposta-workflow.consulta-serasa
+                    group: analise-credito-us
+                proposta_workflow_consulta_serasa_result:
+                    destination: credito.proposta-workflow.consulta-serasa.result
+                    contentType: application/json
+                proposta_renovacao_workflow_consulta_serasa:
+                    destination: credito.proposta-renovacao-workflow.consulta-serasa
+                    group: analise-credito-us
+                proposta_renovacao_workflow_consulta_serasa_result:
+                    destination: credito.proposta-renovacao-workflow.consulta-serasa.result
+                    contentType: application/json
+                proposta_renovacao_workflow_consulta_serasa_avalistas:
+                    destination: credito.proposta-renovacao-workflow.consulta-serasa-avalistas
+                    group: analise-credito-us
+                proposta_renovacao_workflow_consulta_serasa_avalistas_result:
+                    destination: credito.proposta-renovacao-workflow.consulta-serasa-avalistas.result
+                    contentType: application/json
+                monitore_integracao_pessoa_fisica_v1: 
+                    destination: monitore-integracao-pessoa-fisica-v1
+                    group: analise-credito-us
+                monitore_integracao_pessoa_juridica_v1:
+                    destination: monitore-integracao-pessoa-juridica-v1
+                    group: analise-credito-us
+
+authentication:
+    v2:
+        clientId: tst-client
+        clientSecret: 2b029892-56fa-4805-bc83-ada1956d96c8
+        username: bff.9008
+        password: tecnocred
