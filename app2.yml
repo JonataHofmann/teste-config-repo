@@ -1,0 +1,5 @@
+teste:
+  mensagem:"olá mensagem teste"
+teste2:
+  port:1922
+  name: "teste name"
